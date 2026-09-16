@@ -24,3 +24,26 @@ document.getElementById("copyBtn").addEventListener("click", async ()=>{
   status.textContent="MoMo number copied!";
   setTimeout(()=>status.textContent="",2200);
 });
+
+const slides=document.querySelectorAll(".slider .slide");
+const dotsWrap=document.getElementById("slideDots");
+let current=0, timer;
+const dots=[];
+slides.forEach((_,i)=>{
+  const dot=document.createElement("button");
+  dot.setAttribute("aria-label","Go to slide "+(i+1));
+  dot.addEventListener("click",()=>goTo(i));
+  dotsWrap.appendChild(dot); dots.push(dot);
+});
+function show(){
+  slides.forEach((s,i)=>s.classList.toggle("active",i===current));
+  dots.forEach((d,i)=>d.classList.toggle("active",i===current));
+}
+function restart(){clearInterval(timer);timer=setInterval(()=>goTo(current+1),4000);}
+function goTo(i){
+  current=(i+slides.length)%slides.length;
+  show(); restart();
+}
+document.getElementById("slideNext").addEventListener("click",()=>goTo(current+1));
+document.getElementById("slidePrev").addEventListener("click",()=>goTo(current-1));
+show(); restart();
